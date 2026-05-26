@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block content %} 
+
+   <!-- Start All Title Box -->
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Checkout</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'products:shop' %}">Shop</a></li>
+                        <li class="breadcrumb-item active">Checkout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Title Box -->
+
+    <!-- Start Cart  -->
+    <div class="cart-box-main">
+        <div class="container">
+            <div class="row new-account-login">
+                <div class="col-sm-6 col-lg-6 mb-3">
+                    <div class="title-left">
+                        <h3>Account Login</h3>
+                    </div>
+                 {% if request.user.is_authenticated %}
+                    <div class="alert alert-success">
+                        Welcome back, {{ request.user.first_name|default:request.user.username }} 👋,
+                        <a class="text-danger" href="{% url 'accounts:logout' %}">Logout</a>
+                    </div>
+                 {% else %} 
+                    <h5><a data-toggle="collapse" href="#formLogin" role="button" aria-expanded="false">Click here to Login</a></h5>
+                    <form class="mt-3 collapse review-form-box" id="formLogin" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="login">
+                        {% include 'partials/alerts.html' %}                        
+                        <div class="form-row">                               
+                            <div class="form-group col-md-6">                                                                                             
+                                <label for="login_email" class="mb-0">Email Address</label>
+                                <input type="email" class="form-control" name="login_email" id="login_email" placeholder="Enter Email" > </div>
+                            <div class="form-group col-md-6">
+                                <label for="login_password" class="mb-0">Password</label>
+                                <input type="password" class="form-control" name="login_password" id="login_password" placeholder="Password"> </div>
+                        </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" checked class="custom-control-input" name="remember" id="remember">
+                                    <label class="custom-control-label" for="remember">Remember Me</label>
+                                </div>
+                        
+                        <button type="submit" name='btnlogin' class="btn hvr-hover">Login</button>
+                  {% endif %}          
+                    </form>
+                </div>
+                {% if not request.user.is_authenticated %}
+                <div class="col-sm-6 col-lg-6 mb-3">
+                    <div class="title-left">
+                        <h3>Create New Account</h3>
+                    </div>
+                    {% if is_added == True %}      
+                    {% include 'partials/registeralert.html' %}
+
+                    {% else %}
+                    <h5><a data-toggle="collapse" href="#formRegister" role="button" aria-expanded="false">Click here to Register</a></h5>
+                    <form class="mt-3 collapse review-form-box" id="formRegister" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="register">
+                        {% include 'partials/registeralert.html' %}                      
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="InputFName" class="mb-0">First Name</label>
+                                <input type="text" class="form-control" name="fname" id="InputFName" placeholder="First Name" required value="{{ fname }}"> </div>
+                            <div class="form-group col-md-6">
+                                <label for="InputLName" class="mb-0">Last Name</label>
+                                <input type="text" class="form-control" name="lname" id="InputLName" placeholder="Last Name" required value="{{ lname }}"> </div>
+                            <div class="form-group col-md-6">
+                                <label for="InputEmail1" class="mb-0">Email Address</label>
+                                <input type="email" class="form-control" name="signup_email" id="InputEmail1" placeholder="Enter Email" required value="{{ email }}"> </div>
+                            <div class="form-group col-md-6">
+                                <label for="InputPassword1" class="mb-0">Password</label>
+                                <input type="password" class="form-control" name="signup_password" id="InputPassword1" placeholder="Password" required value="{{ password }}"> </div>
+                        </div>
+                        <button type="submit" name="registerbtn" class="btn hvr-hover">Register</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6 mb-3">
+                        <div class="checkout-address">
+                            <div class="title-left">
+                                <h3>Billing address</h3>
+                            </div>
+                            <form class="needs-validation" novalidate method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="checkout">
+                                {% include 'partials/checkoutalert.html' %}                        
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fname2">First name *</label>
+                                        <input type="text" class="form-control" name="fname2" id="fname2" placeholder="" value="{{ fname2 }}" required>
+                                        <div class="invalid-feedback"> Valid first name is required. </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lname2">Last name *</label>
+                                        <input type="text" class="form-control" name="lname2" id="lname2" placeholder="" value="{{ lname2 }}" required>
+                                        <div class="invalid-feedback"> Valid last name is required. </div>
+                                    </div>       
+                                </div>
+                                <div class="mb-3">
+                                    <label for="order_email">Email Address *</label>
+                                    <input type="email" class="form-control is-invalid" name="order_email" id="order_email" placeholder="Enter Email" required value="{{ order_email }}">
+                                    <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                                </div>
+                                <div class="list">
+                                    <div class="col-md-5 mb-3">
+                                        <label for="city">City *</label>
+                                        <select name="city" class="wide w-100" id="city">
+                                        <option value="Choose..." data-display="Select">Select City...</option>
+                                        {% for city in cities %}
+                                            <option value="{{ city.id }}">{{ city.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                        <div class="invalid-feedback"> Please select a valid country. </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">                                                           
+                                        <label for="area">Area *</label>
+                                        <select name="area" class="wide w-100" id="area">
+                                        <option data-display="Select">Select Area...</option>
+                                        {% for area in areas %}
+                                            <option value="{{ area.id }}">{{ area.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                        <div class="invalid-feedback"> Please provide a valid state. </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phonenum">Phone Number *</label>
+                                        <input type="number" class="form-control" name="phonenum" id="phonenum" placeholder="" value="{{ phonenum }}"  maxlength="11"oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,11)" required>
+                                        <div class="invalid-feedback"> Valid phone number is required. </div>
+                                    </div>                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="streetname">Street name *</label>
+                                        <input type="text" class="form-control" name="streetname" id="streetname" placeholder="" required value="{{ streetname }}">
+                                        <div class="invalid-feedback"> Street name required. </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="buildingnum">Building num *</label>
+                                        <input type="number" class="form-control" name="buildingnum" id="buildingnum" placeholder="" required value="{{ buildingnum }}">
+                                        <div class="invalid-feedback"> Building number required. </div>
+                                    </div>
+                                </div>   
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="floornum">Floor num *</label>
+                                        <input type="number" class="form-control" name="floornum" id="floornum" placeholder="" required value="{{ floornum }}">
+                                        <div class="invalid-feedback"> Floor number required. </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="flatnum">Flat num *</label>
+                                        <input type="number" class="form-control" name="flatnum" id="flatnum" placeholder="" required value="{{ flatnum }}">
+                                        <div class="invalid-feedback"> Flat number required. </div>
+                                    </div>
+                                </div>       
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" checked class="custom-control-input" name="save_info" id="save_info">
+                                    <label class="custom-control-label" for="save_info">Save this information for next time</label>
+                                </div>
+                                <hr class="mb-4">
+                                <div class="title"> <span>Payment</span> </div>
+                                <div class="d-block my-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="paymentMethod" value="card" checked>
+                                        <label>Credit / Debit Card</label>
+                                    </div>
+
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="paymentMethod" value="wallet">
+                                        <label>Mobile Wallet </label>
+                                    </div>  
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="paymentMethod" value="cod">
+                                        <label>Cash on Delivery</label> 
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-6 mb-3">
+                        <div class="row">
+                           
+                            <div class="col-md-12 col-lg-12">
+                                <div class="odr-box">
+                                    <div class="title-left">
+                                        <h3>Shopping cart</h3>
+                                    </div>
+                                    {% for item in order_items %}
+                                    <div class="rounded p-2 bg-light">
+                                        <div class="media mb-2 border-bottom">
+                                            
+                                            <div class="media-body">
+                                                 <a href="{% url 'products:shop_detail' pro_id=item.product.id %}"> {{ item.product.name }}</a>
+                                                <div class="small text-muted">Price: {{ item.price|floatformat:2 }} EGP <span class="mx-2">|</span> Qty: {{ item.quantity }} <span class="mx-2">|</span> Subtotal: {{ item.total_price|floatformat:2 }} EGP</div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                   {% endfor %} 
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-12">
+                                <div class="order-box">
+                                    <div class="title-left">
+                                        <h3>Your order</h3>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="font-weight-bold">Product</div>
+                                        <div class="ml-auto font-weight-bold">Total</div>
+                                    </div>
+                                    <hr class="my-1">
+                                    <div class="d-flex">
+                                        <h4>Sub Total</h4>
+                                        <div class="ml-auto font-weight-bold"> {{ cart_total|floatformat:2 }} EGP </div>
+                                    </div>
+                                    <hr class="my-1">
+                                    <div class="d-flex">
+                                        <h4>Coupon Discount</h4>
+                                        <div class="ml-auto font-weight-bold"> {{ coupon_discount|floatformat:2 }} EGP </div>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <h4>Shipping Cost</h4>
+                                        <div class="ml-auto font-weight-bold"> {{ shipping_Cost|floatformat:2 }} EGP </div>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex gr-total">
+                                        <h5>Grand Total</h5>
+                                        <div class="ml-auto h5"> {{ grand_total|floatformat:2 }} EGP </div>
+                                    </div>
+                                    <hr> </div>
+                            </div>
+                            <div class="col-12 d-flex shopping-box">
+                            <button type="submit" name="btnplaceorder" class="ml-auto btn hvr-hover">Place Order</button></div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Cart -->
+{% endblock %}

@@ -1,0 +1,52 @@
+    <!-- Start Main Top -->
+    <div class="main-top">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="text-slid-box">
+                        <div id="offer-box" class="carouselTicker">
+                            <ul class="offer-box">
+                                {% for ad in ads %}
+                                <li>
+                                    <i class="fab fa-opencart"></i> {{ ad.title }}
+                                </li>
+                                {% empty %}
+                                <li>
+                                    <i class="fab fa-opencart"></i> No advertisements available at the moment.
+                                </li>
+                                {% endfor %}    
+                            </ul>
+                        </div>                       
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="right-phone-box">
+                        <p> Call US :- <a href="#"> +11 900 800 100</a></p>
+                    </div>
+                    <div class="our-link">
+                        <ul>
+                            {% if request.user.is_authenticated %}
+                            <li class="dropdown">
+                               Welcome, <a class="dropdown-toggle" href="#" id="topUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                     {{ request.user.first_name|default:request.user.username }} 
+                                </a>
+                                
+                                <ul class="dropdown-menu" aria-labelledby="topUserDropdown">
+                                    <li><a style="color: black;" class="dropdown-item" href="{% url 'profiles:my_account' %}">My Account</a></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}">Logout</a></li>                               
+                                </ul>
+                            </li>
+                            {% else %}
+                            {% comment %}
+                            <li><a href="{% url 'profiles:my_account' %}">My Account</a></li>                     
+                            <li><a href="#">Our location</a></li> 
+                             {% endcomment %}
+                            <li><a href="{% url 'accounts:checkout' %}">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Main Top -->

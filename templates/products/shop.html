@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <!-- Start All Title Box -->
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Shop</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Shop</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Title Box -->
+
+    <!-- Start Shop Page  -->
+    <div class="shop-box-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
+                    <div class="product-categori">
+                        <div class="search-product">
+                            <form action="#">
+                                <input class="form-control" name="see" placeholder="Search here..." type="text">
+                                <button type="submit"> <i class="fa fa-search"></i> </button>
+                            </form>
+                        </div>
+                       <div class="filter-sidebar-left">
+                                    <div class="title-left">
+                                        <h3>Categories</h3>
+                                    </div>
+
+                                    <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men">
+
+                                        <!-- All -->
+                                        <a class="list-group-item list-group-item-action category-link" href="{% url 'products:shop' %}">
+                                            All <small class="text-muted">({{ products|length }})</small>
+                                        </a>
+
+                                        {% for category in categories %}
+                                            {% if category.subcategories.all %}
+                                                <div class="list-group-collapse sub-men">
+                                                    <a class="list-group-item list-group-item-action"
+                                                    href="#cat-{{ category.id }}"
+                                                    data-toggle="collapse"
+                                                    aria-expanded="false">
+                                                        {{ category.name }}
+                                                        <small class="text-muted">({{ category.subcategories.count }})</small>
+                                                    </a>
+
+                                                    <div class="collapse" id="cat-{{ category.id }}" data-parent="#list-group-men">
+                                                        <div class="list-group">
+                                                            {% for sub in category.subcategories.all %}
+                                                                <a href="{% url 'products:shop_by_subcategory' sub.slug %}"
+                                                                class="list-group-item list-group-item-action">
+                                                                    {{ sub.name }}
+                                                                    <small class="text-muted">({{ sub.product_count }})</small>
+                                                                </a>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                        <div class="filter-price-left">
+                            <div class="title-left">
+                                <h3>Price</h3>
+                            </div>
+                            <form id="filter-form" method="get" action="{% if category %}{% url 'products:shop_by_category' category.slug %} {% elif subcategory %}{% url 'products:shop_by_subcategory' subcategory.slug %} {% else %}{% url 'products:shop' %}{% endif %}">
+                                <div class="price-box-slider">
+                                    <div id="slider-range" data-selected-min="{{ selected_min_price|default:1000 }}" data-selected-max="{{ selected_max_price|default:5000 }}"></div>
+                                    <p>
+                                        <input type="text" id="amount" readonly style="border:0; color:#fbb714; font-weight:bold; width:100%; background:transparent; text-align:center;">
+                                    </p>
+                                    <input type="hidden" name="min_price" id="min_price" value="{{ selected_min_price|default_if_none:'' }}">
+                                    <input type="hidden" name="max_price" id="max_price" value="{{ selected_max_price|default_if_none:'' }}">
+                                    <button class="btn hvr-hover" type="submit">Filter</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="filter-brand-left">
+                            <div class="title-left">
+                                <h3>Occasion</h3>
+                            </div>
+                            <div class="brand-box">
+                                <ul>
+                                    {% for occ in occasions %}
+                                    <li>
+                                        <div class="radio radio-danger">
+                                            <input name="occasion" id="oc{{ occ.id }}" value="{{ occ.id }}" type="checkbox" {% if occ.id|stringformat:"s" in selected_occasions %}checked{% endif %}>
+                                            <label for="oc{{ occ.id }}"> {{ occ.name }} </label>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                    <li>
+                                </ul>
+                            </div>
+                        </div>     
+                    </div> 
+                </div>
+                
+                <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+                    <div class="right-product-box">
+                        <form id="search-form" method="GET">
+                        <div class="product-item-filter row">
+                            
+                               <div class="col-12 mb-3">
+                                    
+                                    <input type="text" name="q" value="{{ request.GET.q }}" id="search-input" placeholder="Search about products..." class="form-control" />
+                
+                                </div>
+                            <div class="col-12 col-sm-8 text-center text-sm-left">
+                                
+                                <div class="toolbar-sorter-right">
+                                    <span>Sort by </span>
+                                    <select id="basic" class="selectpicker show-tick form-control"name="s" onchange="this.form.submit()" data-placeholder="$ USD">
+									<option data-display="Select">Nothing</option>
+									<option value="popularity" {% if request.GET.s == "popularity" %}selected{% endif %}">Popularity</option>
+									<option value="high" {% if request.GET.s == "high" %}selected{% endif %}">High Price → Low Price</option>
+									<option value="low" {% if request.GET.s == "low" %}selected{% endif %}">Low Price → High Price</option>
+									<option value="best_selling" {% if request.GET.s == "best_selling" %}selected{% endif %}">Best Selling</option>
+								    </select>
+                                </div>                                           
+                                <p>Showing all {{ products.count }} results</p>
+                            </div>
+                        </form>             
+                            <div class="col-12 col-sm-4 text-center text-sm-right">
+                                <ul class="nav nav-tabs ml-auto">                                    
+                                    <li>
+                                        <a class="nav-link active" href="#grid-view" data-toggle="tab"> <i class="fa fa-th"></i> </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="#list-view" data-toggle="tab"> <i class="fa fa-list-ul"></i> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="product-list-container">
+                        <div class="row product-categorie-box">
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
+                                    <form method="post" action="{% url 'add_to_cart' %}">
+                                    {% include 'profiles/editloginalerts.html' %}
+
+                                    {% csrf_token %}                                     
+                                    <div class="row">                                   
+                                        {% for product in products %}
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <div class="products-single fix">
+                                                <div class="box-img-hover">
+                                                    <div class="type-lb">
+                                                        {% if product.is_on_sale %}<p class="sale">Sale</p>{% endif %}
+                                                        {% if product.is_new %}<p class="new">New</p>{% endif %}
+                                                        {% if product.isbestseller %}<p class="bestseller">Best Seller</p>{% endif %}
+                                                        {% if product.istopfeatured %}<p class="topfeatured">Top Featured</p>{% endif %}
+                                                    </div>
+                                                    <img src="{{ product.image.url }}" class="img-fluid" alt="product.name">
+                                                    <div class="mask-icon">
+                                                        <ul>
+                                                            <li><a href="{% url 'products:shop_detail' product.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                                            
+                                                            <li><a href="{% url 'accounts:product_favorite' product.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                                        </ul>
+                                                           <button class="btn hvr-hover cart" type="submit" name="product_id" value="{{ product.id }}">Add to Cart</button>
+                                                    </div>
+                                                </div>
+                                                <div class="why-text">
+                                                    <h4>{{ product.name }}</h4>
+                                                    <h5> {{ product.price }} EGP</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <h4>
+                                        No Products Here,            
+                                        <a href="{% url 'products:shop' %}" class="btn hvr-hover">Products</a>
+                                        </h4>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                                
+                                <div role="tabpanel" class="tab-pane fade" id="list-view">
+                                    <div class="list-view-box">
+                                        {% for pro in products %}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="products-single fix">
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                                            <div class="box-img-hover">
+                                                                <div class="type-lb">
+                                                                    {% if pro.is_on_sale %}<p class="sale">Sale</p>{% endif %}
+                                                                    {% if pro.is_new %}<p class="new">New</p>{% endif %}
+                                                                    {% if pro.isbestseller %}<p class="bestseller">Best Seller</p>{% endif %}
+                                                                    {% if pro.istopfeatured %}<p class="topfeatured">Top Featured</p>{% endif %}
+                                                                </div>
+                                                                <img src="{{ pro.image.url }}" class="img-fluid" alt="Image">
+                                                                <div class="mask-icon">
+                                                                    <ul>
+                                                                        <li><a href="{% url 'products:shop_detail' pro.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>                                                       
+                                                                        <li><a href="{% url 'accounts:product_favorite' pro.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
+                                                            <div class="why-text full-width">
+                                                                <h4>{{pro.name}}</h4>
+                                                                <h5> <del>$ 60.00</del> ${{pro.price|floatformat:2}} EGP</h5>
+                                                                <p>{{pro.description}}</p>
+                                                                <button class="btn hvr-hover" type="submit" name="product_id" value="{{ pro.id }}">Add to Cart</button>
+                                                            </div>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                             
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Shop Page -->
+
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+ <!-- Start All Title Box -->
+    <div class="all-title-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Wishlist</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'products:shop' %}">Shop</a></li>
+                        <li class="breadcrumb-item active">Wishlist</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Title Box -->
+
+    <!-- Start Wishlist  -->
+    <div class="wishlist-box-main">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="table-main table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Images</th>
+                                    <th>Product Name</th>
+                                    <th>Unit Price </th>
+                                    <th>Stock</th>
+                                    <th>Add Item</th>
+                                    <th>Remove</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+                           {% include 'profiles/editloginalerts.html' %}
+     
+                            {% for pro in products %}                                
+       
+                                <tr>
+                                    <td class="thumbnail-img">
+                                        <a href="{% url 'products:shop_detail' pro.id %}">
+									<img class="img-fluid" src="{{ pro.image.url }}" alt="product image" />
+								</a>
+                                    </td>
+                                    <td class="name-pr">
+                                        <a href="{% url 'products:shop_detail' pro.id %}">
+									{{ pro.name }}
+								</a>
+                                    </td>
+                                    <td class="price-pr">
+                                        <p>{{ pro.price }} EGP </p>
+                                    </td>
+                                    <td class="quantity-box">In Stock</td>
+                                    <td class="add-pr">
+                                     <form method="post" action="{% url 'add_to_cart' %}">
+                                            {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ pro.id }}">
+                                        <button class="btn hvr-hover" type="submit">Add to cart</button>
+                                     </form>
+                                    </td>
+                                    <td class="remove-pr">
+                                        <a href="{% url 'accounts:remove_product_favorite' pro.id %}">
+									<i class="fas fa-times"></i>
+								</a>
+                                    </td>
+                                </tr>
+
+                             {% endfor %}      
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Wishlist -->
+
+{% endblock %}

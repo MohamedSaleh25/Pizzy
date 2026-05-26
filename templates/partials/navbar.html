@@ -1,0 +1,102 @@
+{% load static %}
+       <!-- Start Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+            <div class="container">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                    <a class="navbar-brand" href="{% url 'pages:index' %}"><img src=" {% static 'images/2.png' %} " class="logo" alt="product image"></a>
+                </div>
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'pages:index' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'pages:about' %}">About Us</a></li>
+                        <li class="dropdown megamenu-fw">
+                            <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">Product</a>
+                            <ul class="dropdown-menu megamenu-content" role="menu">
+                                <li>
+                                    <div class="row">
+                                        {% for category in categories %}
+                                        <div class="col-menu col-lg-3 col-md-6">
+                                            <h6 class="title">{{ category.name }}</h6>
+                                            
+                                            <div class="content">
+                                                <ul class="menu-col">
+                                                    {% for sub in category.subcategories.all %}
+                                                    <li><a href="{% url 'products:shop_by_subcategory' sub.slug %}">{{ sub.name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            
+                                        </div>
+                                        {% endfor %}
+                                        <!-- end col-3 -->
+                                    </div>
+                                    <!-- end row -->
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="{% url 'products:shop' %}" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'accounts:cart' %}">Cart</a></li>
+                                <li><a href="{% url 'accounts:checkout' %}">Checkout</a></li>
+                                <li><a href="{% url 'profiles:my_account' %}">My Account</a></li>
+                                <li><a href="{% url 'accounts:show_product_favorite' %}">Wishlist</a></li>
+                                <li><a href="{% url 'products:shop_detail' pro_id=1 %}">Shop Detail</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="{% url 'pages:contact_us' %}">Contact Us</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+
+                <!-- Start Atribute Navigation -->
+                <div class="attr-nav">
+                    <ul>
+                        <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                        <li class="side-menu"><a href="#">
+						<i class="fa fa-shopping-bag"></i>
+                            <span class="badge">{{ cart_item_count }}</span>
+					</a></li>
+                    </ul>
+                </div>
+                <!-- End Atribute Navigation -->
+            </div>
+            <!-- Start Side Menu -->
+            <div class="side">
+                <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                <div class="cart-box">
+                    <ul class="cart-list">
+                       {% if order %}
+                        {% for line in order_items %}
+                        <li>
+                            <a href="{% url 'products:shop_detail' pro_id=line.product.id %}" class="photo"><img src=" {{ line.product.image.url }} " class="cart-thumb" alt="" /></a>
+                            <h6><a href="{% url 'products:shop_detail' pro_id=line.product.id %}">{{ line.product.name }}</a></h6>
+                            <p>{{ line.quantity }}x  <span class="price">{{ line.product.price }} EGP</span></p>
+                        </li>
+                        {% endfor %}
+                        <li class="total">
+                            <div class="cart-total-row">
+                                <a href="{% url 'accounts:cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                                <span class="cart-total-value"><strong>Total</strong>: {{ cart_total|floatformat:2 }} EGP</span>
+                            </div>
+                        </li>
+                       {% else %}
+                        <li>No orders yet</li>
+                       {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <!-- End Side Menu -->
+        </nav>
+        <!-- End Navigation -->
+
+
+   

@@ -1,0 +1,135 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <!-- Start Slider -->
+    <div id="slides-shop" class="cover-slides">
+        <ul class="slides-container">
+            <li class="text-left">
+                <img src="{% static 'images/banner-01.jpg' %} " alt="">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>Welcome To <br> Thewayshop</strong></h1>
+                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                            <p><a class="btn hvr-hover" href="{% url 'products:shop' %}">Shop New</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="text-center">
+                <img src="{% static 'images/banner-02.jpg' %} " alt="">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>Welcome To <br> Thewayshop</strong></h1>
+                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                            <p><a class="btn hvr-hover" href="{% url 'products:shop' %}">Shop New</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="text-right">
+                <img src="{% static 'images/banner-03.jpg' %} " alt="">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>Welcome To <br> Thewayshop</strong></h1>
+                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                            <p><a class="btn hvr-hover" href="{% url 'products:shop' %}">Shop New</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- End Slider -->
+
+    <!-- Start Categories  -->
+    <div class="categories-shop">
+        <div class="container">
+            <div class="row">
+                {% for category in categories %}
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="shop-cat-box">
+                        <img class="img-fluid" src="{{ category.image.url }}" alt="" />
+                        <a class="btn hvr-hover" href="{% url 'products:shop' %}">{{ category.name }}</a>
+                    </div>
+                   
+                </div>
+                {% endfor %}
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Categories -->
+
+    <!-- Start Products  -->
+    <div class="products-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>Featured Products</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="special-menu text-center">
+                        <div class="button-group filter-button-group">
+                            <button class="active" data-filter="*">All</button>
+                            <button data-filter=".top-featured">Top featured</button>
+                            <button data-filter=".best-seller">Best seller</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post" action="{% url 'add_to_cart' %}">
+                {% csrf_token %}
+            <div class="row special-list">
+                {% for product in products %}
+                <div class="col-lg-3 col-md-6 special-grid {% if product.istopfeatured %}top-featured{% endif %} {% if product.isbestseller %}best-seller{% endif %}">
+                    <div class="products-single fix">
+                        {% include 'profiles/editloginalerts.html' %}
+                        <div class="box-img-hover">                       
+                            <div class="type-lb">
+                                 {% if product.isbestseller %}<p class="bestseller">Best Seller</p>{% endif %}
+                                 {% if product.istopfeatured %}<p class="topfeatured">Top Featured</p>{% endif %}                                
+                            </div>                            
+                            <img src="{{ product.image.url }}" class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+                                    <li><a href="{% url 'products:shop_detail' product.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="{% url 'accounts:product_favorite' product.id %}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                                <button class="btn hvr-hover cart" type="submit" name="product_id" value="{{ product.id }}">Add to Cart</button>
+                            </div>
+                        </div>
+                        <div class="why-text">
+                            <h4>{{ product.name }}</h4>
+                            <h5> {{ product.price }} EGP</h5>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+
+
+            </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Products  -->
+
+  
+
+{% endblock %}
+
