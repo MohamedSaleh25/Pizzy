@@ -1,1 +1,1 @@
-web: gunicorn Pizzy.wsgi
+web: gunicorn project.wsgi
