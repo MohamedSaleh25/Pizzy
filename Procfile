@@ -1,1 +1,1 @@
-web: gunicorn Pottery.wsgi
+web: gunicorn Pizzy.wsgi
