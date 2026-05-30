@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["peezy.up.railway.app",".railway.app"]
+ALLOWED_HOSTS = ["peezy.up.railway.app",".railway.app",git add .]
 #ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "localhost"]
 #CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app"]
 
@@ -37,6 +37,8 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'cloudinary',
+    'cloudinary_storage',
     'orders.apps.OrdersConfig',
     'profiles.apps.ProfilesConfig',
     'accounts.apps.AccountsConfig',
@@ -157,8 +159,8 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -190,3 +192,12 @@ PAYMOB_INTEGRATION_ID = "your_integration_id"
 PAYMOB_IFRAME_ID = "your_iframe_id"
 
 
+import cloudinary
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
