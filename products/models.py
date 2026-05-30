@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Category(models.Model):
@@ -48,7 +49,8 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    image = models.ImageField(upload_to='product_images/%Y/%m/%d/')
+    #image = models.ImageField(upload_to='product_images/%Y/%m/%d/')
+    image = CloudinaryField('image', folder='product_images')
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     is_new = models.BooleanField(default=False)
     is_on_sale = models.BooleanField(default=False)

@@ -38,7 +38,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 INSTALLED_APPS = [
     'cloudinary',
-    'cloudinary_storage',
     'orders.apps.OrdersConfig',
     'profiles.apps.ProfilesConfig',
     'accounts.apps.AccountsConfig',
@@ -64,9 +63,6 @@ MIDDLEWARE = [
 ]
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
