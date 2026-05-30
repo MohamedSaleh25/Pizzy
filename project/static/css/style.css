@@ -1679,7 +1679,7 @@
 }
  .list-group-tree .list-group-item.active {
      color: #934a34;
-     background-color: #fff;
+     background-color: #fffaf2;
      font-weight: 700;
 }
  .list-group-tree .list-group-collapse .list-group > .list-group-item::before {
@@ -1689,11 +1689,11 @@
      content: '';
      width: 8px;
      height: 1px;
-     background-color: #ced4da;
+     background-color: #fffaf2;
 }
  .list-group-tree .list-group-item:hover {
      color: #934a34;
-     background-color: #fff;
+     background-color: #fffaf2;
      outline: 0;
      font-weight: 700;
 }
