@@ -15,7 +15,7 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: BASE_DIR / 'subdir'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "localhost"]
@@ -166,11 +166,16 @@ MESSAGE_TAGS = {
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # CSRF Settings
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
-CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.up.railway.app',
+    'https://*.railway.app',
+]
 
 
-PAYMOB_API_KEY = "your_api_key"
-PAYMOB_INTEGRATION_ID = "your_integration_id"
-PAYMOB_IFRAME_ID = "your_iframe_id"
+PAYMO_API_KEY = "your_api_key"
+PAYMO_INTEGRATION_ID = "your_integration_id"
+PAYMO_IFRAME_ID = "your_iframe_id"
+
