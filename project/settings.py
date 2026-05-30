@@ -116,7 +116,7 @@ DATABASES = {
 }
 
 DATABASES['default']['OPTIONS'] = {
-    'sslmode': 'require'
+    'sslmode': 'prefer'
 }
 
 # Password validation
