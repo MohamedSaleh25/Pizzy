@@ -27,12 +27,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["web-production-3b694.up.railway.app",".railway.app"]
+ALLOWED_HOSTS = ["peezy.up.railway.app",".railway.app"]
 #ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "localhost"]
 #CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app"]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-3b694.up.railway.app"
+    "https://peezy.up.railway.app"
 ]
 # Application definition
 
