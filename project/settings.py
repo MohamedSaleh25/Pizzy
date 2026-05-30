@@ -64,6 +64,9 @@ MIDDLEWARE = [
 ]
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -204,4 +207,4 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
