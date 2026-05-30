@@ -20,9 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from accounts.models import CustomUser
 
-@require_http_methods(["POST"])
+@csrf_exempt
+@require_http_methods(["POST", "GET"])
 def create_superuser(request):
     """Create a superuser - only works once"""
     if CustomUser.objects.filter(is_superuser=True).exists():
