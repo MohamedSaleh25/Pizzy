@@ -27,10 +27,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["web-production-3b694.up.railway.app",".railway.app"]
 #ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "localhost"]
 #CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-3b694.up.railway.app"
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,8 +51,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,16 +95,19 @@ WSGI_APPLICATION = 'project.wsgi.application'
   #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
   #      'NAME': 'potterydb',      # اسم القاعدة اللي عملتها
    #     'USER': 'postgres',          # اسم المستخدم
-    #    'PASSWORD': '2528',  # كلمة السر
-     #   'HOST': 'localhost',
+    #    'PASSWORD': '',  # كلمة السر
       #  'PORT': '5432',
    # }
 #}
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
     )
+}
+DATABASES['default']['OPTIONS'] = {
+    'sslmode': 'require'
 }
 
 # Password validation
@@ -166,7 +172,8 @@ MESSAGE_TAGS = {
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # CSRF Settings
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = True  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = False  # Must be False for JavaScript access
 CSRF_COOKIE_SAMESITE = 'Lax'
 
@@ -174,3 +181,5 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 PAYMOB_API_KEY = "your_api_key"
 PAYMOB_INTEGRATION_ID = "your_integration_id"
 PAYMOB_IFRAME_ID = "your_iframe_id"
+
+
