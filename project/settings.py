@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
-import cloudinary_storage
 from dotenv import load_dotenv
-
 import dj_database_url
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -67,10 +65,10 @@ MIDDLEWARE = [
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage", # تم التعديل هنا
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
@@ -111,7 +109,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
    # }
 #}
 
- DATABASES = {
+DATABASES = {
     'default': dj_database_url.parse(
         os.environ.get('DATABASE_URL'),
         conn_max_age=600,
@@ -210,3 +208,4 @@ cloudinary.config(
     secure=True
 )
 #DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
