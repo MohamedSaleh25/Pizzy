@@ -187,17 +187,18 @@ PAYMOB_INTEGRATION_ID = "your_integration_id"
 PAYMOB_IFRAME_ID = "your_iframe_id"
 
 
-import cloudinary
 
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
-    secure=True
-)
 #DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# امسح كود config القديم وحط الديكشنري ده مكانه بالحرف:
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
+}
+
+# وتأكد إن الـ STORAGES تحتها علطول مكتوبة كدا:
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -207,6 +208,5 @@ STORAGES = {
     },
 }
 
-# السطرين دول بنخليهم كدا عشان نخدع مكتبة Cloudinary القديمة بدون ما نشغل WhiteNoise Storage
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
