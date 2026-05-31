@@ -203,9 +203,10 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage", 
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 
+# السطرين دول بنخليهم كدا عشان نخدع مكتبة Cloudinary القديمة بدون ما نشغل WhiteNoise Storage
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
