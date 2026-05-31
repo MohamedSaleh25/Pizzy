@@ -191,27 +191,24 @@ PAYMOB_IFRAME_ID = "your_iframe_id"
 #DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# امسح كود config القديم وحط الديكشنري ده مكانه بالحرف:
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# 1. الديكشنري المطلوب لمكتبة django-cloudinary-storage
+# اكتب بياناتك الحقيقية هنا مباشرة بين العلامات ''
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
-    'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
-    'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
+    'CLOUD_NAME': 'dqvgrfzte',
+    'API_KEY': '718125188833667',
+    'API_SECRET': 'AfXMBKzV1iBKt_33SFJovt6rkMU',
 }
 
-# 2. الإعداد الصريح للمكتبة الأم لتجنب خطأ الـ ValueError
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    cloud_name='dqvgrfzte',
+    api_key='718125188833667',
+    api_secret='AfXMBKzV1iBKt_33SFJovt6rkMU',
     secure=True
 )
 
-# 3. إعدادات الـ Storages المتوافقة مع دجانجو 6
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
