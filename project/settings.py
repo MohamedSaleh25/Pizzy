@@ -65,14 +65,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-#STORAGES = {
-#    "default": {
-#        "BACKEND": "django.core.files.storage.FileSystemStorage",
-#    },
-  #  "staticfiles": {
-#        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage", # تم التعديل هنا
-#    },
-#}
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage", # تم التعديل هنا
+    },
+}
 
 ROOT_URLCONF = 'project.urls'
 
@@ -209,4 +209,4 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
