@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
    # }
 #}
 
-DATABASES = {
+ DATABASES = {
     'default': dj_database_url.parse(
         os.environ.get('DATABASE_URL'),
         conn_max_age=600,
