@@ -396,23 +396,23 @@ def checkout(request):
 
                          if payment_method == 'cod':
                               for item in order_items:
-                                try:
-                                   for item in order_items:
+                                   try:
                                         product = item.product
                                         
-                                        # فحص أمان: لو الحقل مش متعرّف أو بـ None خليه بـ 0 عشان ميضربش
-                                        if product.quantity_available is None:
-                                             product.quantity_available = 0
-                                        if product.quantity_sold is None:
-                                             product.quantity_sold = 0
+                                        # 🚨 خط الدفاع الأخير والحاسم (يمنع كارثة الـ Race Condition والسوالب)
+                                        if product.quantity_available < item.quantity:
+                                             print(f"⚠️ للاسف القطعة الأخيرة طارت! {product.name} لم تعد متوفرة.")
+                                             messages.error(request, f"عذراً، المنتج '{product.name}' نفد أثناء إتمام العملية.")
+                                             return redirect('cart_detail') # نرجعه للسلة عشان يشيله
                                              
+                                        # الخصم الفعلي بعد التأكد
                                         product.quantity_available -= item.quantity
                                         product.quantity_sold += item.quantity
                                         product.save()
-                                except Exception as e:
-                                   # السطر ده هيطبع لك سبب المشكلة بالظبط في الـ Terminal باللون الأحمر
-                                   print("\n❌❌ ERROR IN STOCK UPDATE:", str(e), "\n")   
-                                   product.save()
+                                        
+                                   except Exception as e:
+                                        print("Error:", str(e))
+
                               order.is_completed = True
                               order.payment_status = 'paid'
                               order.save()
