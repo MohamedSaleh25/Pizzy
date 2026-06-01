@@ -2,11 +2,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
-
 from project.settings import PAYMOB_API_KEY, PAYMOB_INTEGRATION_ID, PAYMOB_IFRAME_ID
 from .models import  Product, Order, OrderDetail
 
 def add_to_cart(request):
+    
     if request.method != 'POST':
         messages.error(request, 'Invalid request.')
         return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -30,6 +30,9 @@ def add_to_cart(request):
         quantity = 1
 
     product = get_object_or_404(Product, id=product_id)
+    if product.quantity_available <= 0:
+        messages.error(request, f'This item "{product.name}" is currently Sold Out!')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     order = Order.objects.filter(user=request.user, is_completed=False).first()
 
     if not order:
@@ -46,11 +49,27 @@ def add_to_cart(request):
     )
 
     if not created:
-        order_detail.quantity += quantity
-        order_detail.save()
+       total_requested = order_detail.quantity + quantity
+        
+       if total_requested > product.quantity_available:
+            messages.warning(request, f'Only {product.quantity_available} items available in stock. ')
+            messages.success(request, 'Cart updated to max available.')
+            order_detail.quantity = product.quantity_available
+       else:
+            order_detail.quantity = total_requested
+            messages.success(request, 'Product quantity updated in cart.')
+            
+       order_detail.save()
+        
+    else:
+        # لو المنتج بيتضاف لأول مرة بس الكمية اللي اختارها من برة أكبر من المخزن
+        if order_detail.quantity > product.quantity_available:
+            order_detail.quantity = product.quantity_available
+            order_detail.save()
+            messages.warning(request, f'Only {product.quantity_available} items available. Added maximum to cart.')
+        else:
+            messages.success(request, 'Product added to cart successfully.')
 
-    messages.success(request, 'Product added to cart successfully.')
-    #return redirect('/accounts/cart/')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 

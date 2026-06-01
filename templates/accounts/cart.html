@@ -43,7 +43,14 @@
                                 </thead>
                                 <tbody>
                                 {% if order %}
+                                
                                 {% for item in order_items %}
+                                {% if item.product.quantity_available <= 0 %}
+                                <span class="badge bg-danger">Sold Out</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ item.product.quantity_available }} Available</span>
+                                    <span class="badge bg-secondary">{{ item.product.quantity_sold }} Sold</span>
+                                {% endif %}
                                 <tr>
                                     <td class="thumbnail-img">
                                         <a href="{% url 'products:shop_detail' pro_id=item.product.id %}">

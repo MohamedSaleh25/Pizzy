@@ -4,8 +4,6 @@ from decimal import Decimal, InvalidOperation
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import get_user_model, login, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
-from urllib3 import request
-
 from orders.models import Order, OrderDetail
 from orders.views import get_paymob_token, create_paymob_order, get_payment_key
 from project.settings import PAYMOB_IFRAME_ID
@@ -20,7 +18,7 @@ User = get_user_model()
 def cart(request):
     order = None
     order_items = []
-    cart_total = 0
+    cart_total = Decimal('0.00')
     try:
         coupon_discount = Decimal(str(request.session.get('coupon_discount', 0) or 0))
     except (InvalidOperation, TypeError, ValueError):
@@ -29,7 +27,7 @@ def cart(request):
     shipping_Cost = 30
 
 
-    if request.user.is_authenticated:
+    if request.user.is_authenticated :
         order = Order.objects.filter(user=request.user, is_completed=False).first()
         if order:
             order_items = OrderDetail.objects.filter(order=order)
@@ -92,9 +90,24 @@ def cart(request):
 
                     order_detail = OrderDetail.objects.filter(id=order_detail_id, order=order).first()
                     if order_detail:
-                        order_detail.quantity = quantity
-                        order_detail.save()
-
+                      #  order_detail.quantity = quantity
+                       # order_detail.save()
+                         product = order_detail.product
+                        
+                        # الفحص: لو الكمية المطلوبة أكبر من المتاح في المخزن
+                         if quantity > product.quantity_available:
+                            if product.quantity_available <= 0:
+                                messages.error(request, f'Sorry, "{product.name}" is Sold Out!')
+                                order_detail.delete()  # احذفه من الكارت لأنه خلص تماماً
+                            else:
+                                messages.warning(request, f'Only {product.quantity_available} items available for "{product.name}".')
+                                order_detail.quantity = product.quantity_available
+                                order_detail.save()
+                         else:
+                            # لو الكمية متاحة تمام، بنحفظ عادي
+                            order_detail.quantity = quantity
+                            order_detail.save()
+            return redirect('accounts:cart')
         return redirect('accounts:cart')
 
     grand_total = cart_total - coupon_discount + shipping_Cost
@@ -382,6 +395,24 @@ def checkout(request):
                          order.save()
 
                          if payment_method == 'cod':
+                              for item in order_items:
+                                try:
+                                   for item in order_items:
+                                        product = item.product
+                                        
+                                        # فحص أمان: لو الحقل مش متعرّف أو بـ None خليه بـ 0 عشان ميضربش
+                                        if product.quantity_available is None:
+                                             product.quantity_available = 0
+                                        if product.quantity_sold is None:
+                                             product.quantity_sold = 0
+                                             
+                                        product.quantity_available -= item.quantity
+                                        product.quantity_sold += item.quantity
+                                        product.save()
+                                except Exception as e:
+                                   # السطر ده هيطبع لك سبب المشكلة بالظبط في الـ Terminal باللون الأحمر
+                                   print("\n❌❌ ERROR IN STOCK UPDATE:", str(e), "\n")   
+                                   product.save()
                               order.is_completed = True
                               order.payment_status = 'paid'
                               order.save()

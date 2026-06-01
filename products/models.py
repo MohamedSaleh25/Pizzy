@@ -49,6 +49,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     image = models.ImageField(upload_to='product_images/%Y/%m/%d/')
+    quantity_available = models.IntegerField(default=5)  # الكمية المتاحة
+    quantity_sold = models.IntegerField(default=0)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     is_new = models.BooleanField(default=False)
     is_on_sale = models.BooleanField(default=False)
@@ -61,6 +63,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
         
+    @property
+    def is_sold_out(self):
+        return self.quantity_available <= 0    
 
     class Meta:
         ordering = ['-published_date']

@@ -58,7 +58,7 @@
                         {% include 'profiles/editloginalerts.html' %}
                         <h2>{{ product.name }}</h2>
                         <h5> <del>{{ product.old_price }} EGP</del> {{ product.price }} EGP</h5>
-                        <p class="available-stock"><span> More than 20 available / <a href="#">8 sold </a></span></p>
+                        <p class="available-stock"><span>{{ product.quantity_sold }} sold / {{ product.quantity_available }} available</span></p>
                         <h4>Short Description:</h4>
                         <p>{{ product.description }}</p>
                         <form method="post" action="{% url 'add_to_cart' %}">
