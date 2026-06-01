@@ -102,7 +102,12 @@
                                  {% if product.isbestseller %}<p class="bestseller">Best Seller</p>{% endif %}
                                  {% if product.istopfeatured %}<p class="topfeatured">Top Featured</p>{% endif %}                                
                             </div>                            
+                            {% if product.image %}
                             <img src="{{ product.image.url }}" class="img-fluid" alt="Image">
+                            {% else %}
+                            <!-- صورة مؤقتة حتى لا ينهار الموقع إذا كانت الصورة فارغة -->
+                            <img src="https://via.placeholder.com/150" alt="No image">
+                            {% endif %}
                             <div class="mask-icon">
                                 <ul>
                                     <li><a href="{% url 'products:shop_detail' product.id %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
