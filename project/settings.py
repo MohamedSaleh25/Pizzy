@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["peezy.up.railway.app",".railway.app"]
 #ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "localhost"]
 #CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app"]
 
+
 CSRF_TRUSTED_ORIGINS = [
     "https://peezy.up.railway.app"
 ]
@@ -146,7 +147,7 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
   os.path.join(BASE_DIR, 'project/static'),

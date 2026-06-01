@@ -58,7 +58,7 @@
                         <img class="img-fluid" src="{{ category.image.url }}" alt="" />
                         <a class="btn hvr-hover" href="{% url 'products:shop' %}">{{ category.name }}</a>
                         {% else %}
-                        <!-- صورة مؤقتة حتى لا ينهار الموقع إذا كانت الصورة فارغة -->
+                    
                         <img src="https://via.placeholder.com/150" alt="No image">
                         <a class="btn hvr-hover" href="{% url 'products:shop' %}">{{ category.name }}</a>
                         {% endif %}
